@@ -1,0 +1,26 @@
+.container{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    max-width: 10000px;
+}
+
+.home-img{
+    width: 1000px;
+}
+
+.signup-form{
+    margin-left: 5px;
+    border: 1px solid black;
+    box-shadow: 2px 2px gray;
+    padding: 10px;
+}
+
+.left-side{
+    background: linear-gradient(45deg,rgb(141, 221, 221),rgb(221, 152, 221));
+}
+
+.drop-down{
+    height: 30px;
+    width: 565px;
+    background-color: white;
+}
