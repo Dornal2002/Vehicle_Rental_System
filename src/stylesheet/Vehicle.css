@@ -1,0 +1,38 @@
+.card1{
+    /* background-color: red; */
+    margin-left: 60%;
+}
+
+.form{
+    padding-top: 120px;
+    padding-left: 70%;
+    margin-right: 5%;
+}
+
+.card1{
+    height: fit-content;
+}
+
+.profile-car-image{
+    margin-top: -11%;
+    margin-left: -2%;
+}
+
+.profile-car-image {
+    position: relative;
+    overflow:visible;
+    /* width: 300px; /* Adjust based on your image size */
+    /* height: 200px; Adjust based on your image size */
+} 
+
+/* Define the image */
+.profile-car-image img {
+    display: block;
+    transition: transform 0.5s ease; /* Transition property for smooth movement */
+}
+
+/* Define the hover effect */
+.profile-car-image:hover img {
+    /* transform: translateX(20px);  */
+    transform: translate(4ch,8mm);
+}

@@ -10,17 +10,26 @@
 
 .signup-form{
     margin-left: 5px;
-    border: 1px solid black;
-    box-shadow: 2px 2px gray;
+    /* border: 1px solid black; */
+    /* box-shadow: 2px 2px gray; */
     padding: 10px;
 }
 
-.left-side{
-    background: linear-gradient(45deg,rgb(141, 221, 221),rgb(221, 152, 221));
+.form{
+    padding-top: 150px;
+    padding-left: 200px;
 }
 
-.drop-down{
-    height: 30px;
-    width: 565px;
-    background-color: white;
+.left-side{
+    /* background: linear-gradient(45deg,#F0F8FF,#C0B9B1); */
+    padding-top: 10px;
+    background: #f8faf5;
+    height: fit-content;
+    width: 600px;
+    border-radius: 5%;
+}
+
+.btn-color{
+   background-color: rgb(231, 43, 59);
+   color: #f8faf5;
 }

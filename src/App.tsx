@@ -1,13 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { SignUp } from './pages/SignUp';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { SignUp } from "./pages/SignUp";
+import Error from "./pages/Error";
+import Vehicle from "./pages/Vehicle";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <SignUp/>
-    </div>
+    
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SignUp />} />
+          <Route path="/vehicle" element={<Vehicle/>} />
+          <Route path="*" element={<Error />} />
+        </Routes>
+      </BrowserRouter>
+    
   );
 }
 
