@@ -5,19 +5,26 @@ import { SignUp } from "./pages/SignUp";
 import Error from "./pages/Error";
 import Vehicle from "./pages/Vehicle";
 import GetVehicles from "./pages/GetVehicles";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { SignIn } from "./pages/SignIn";
+import Admin from "./pages/Admin";
 
+const queryClient =new QueryClient()
 function App() {
   return (
-    
+    <QueryClientProvider client={queryClient}>   
       <BrowserRouter>
         <Routes>
+         <Route path="/login" element={<SignIn />}/>
           <Route path="/" element={<SignUp />} />
           <Route path="/vehicle" element={<Vehicle/>} />
+          <Route path="/admin" element={<Admin/>}/>
           <Route path="/getvehicles" element={<GetVehicles/>}/>
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>
+      </QueryClientProvider>
     
   );
 }

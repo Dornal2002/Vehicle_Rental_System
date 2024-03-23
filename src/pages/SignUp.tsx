@@ -5,51 +5,30 @@ import { v4 as uuidv4 } from "uuid";
 import "../stylesheet/SignUp.css";
 import car from "../images/car.jpg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { SignupMutation } from "../hooks/signIn.hook";
+import { SignUp_Data } from "../types/UserDetails";
 
 export const initialValues = {
-  user_id: "",
   name: "",
   email: "",
   password: "",
-  contact_no: "",
+  phone_no: "",
   address: "",
   role: "",
-  driving_license_no: "",
-  isSignUp: false,
+  d_license_no: ""
 };
 
 export const SignUp = () => {
-  const unique_id = uuidv4;
-  const navigate=useNavigate()
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate, isError, isPending } = SignupMutation();
 
-  const handleSignIn=async(email:string, password:string)=>{
-    const token = localStorage.getItem('token')
-    console.log(token)
-    console.log(email,password);
-    try{
-    await axios.post("http://127.0.0.1:8000/login",{
-      "email":email,
-      "password":password,
-      
-    },{
-      headers: {
-        'Content-Type': 'application/json',
-      },        
-     
-    })
-    
-     navigate("/vehicle")
-  }catch(error){
-    alert("Not Sign In")
-  }
-}
+  const navigate=useNavigate()
+
 
   const validationSchema = yup.object({
     name: yup.string().required("Please provide Username"),
-    contact_no: yup
+    phone_no: yup
       .string()
       .required("Please provide Contact no")
       .length(10, "Invalid Conatct No"),
@@ -57,40 +36,55 @@ export const SignUp = () => {
     password: yup.string().required("Please provide password"),
     address: yup.string().required("Please Enter the address"),
     role: yup.string().required("Please select the role"),
-    driving_license_no: yup.string().required("Please Provide the license no"),
+    d_license_no: yup.string().required("Please Provide the license no"),
   });
 
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     
-    onSubmit: async ({name, email, password, contact_no, address,role,driving_license_no }) => {
-      if(formik.values.isSignUp){
-      try {
-        const res=await axios.post("http://127.0.0.1:8000/signup", {
-          name: name,
-          email: email,
-          password: password,
-          phone_no: contact_no,
-          address: address,
-          role: role,
-          d_license_no : driving_license_no 
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },        
-          
+    onSubmit: async ({name, email, password, phone_no, address,role,d_license_no }) => {
+      const payload: SignUp_Data = {
+        name: name,
+        email: email,
+        password: password,
+        phone_no: phone_no,
+        address:address,
+        role:role,
+        d_license_no:d_license_no
+      };
+      if (!isPending) {
+        mutate(payload, {
+          onSuccess: () => {
+            alert("sign up Successfull")
+            navigate("/login");
+          },
         });
-        // console.log(res)
-        localStorage.setItem("token",res.data.token)
-        alert("Successfully registered")
-        navigate("/");
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Failed to add task. Please try again.");
       }
-    }
+      // try {
+      //   const res=await axios.post("http://127.0.0.1:8000/signup", {
+      //     name: name,
+      //     email: email,
+      //     password: password,
+      //     phone_no: phone_no,
+      //     address: address,
+      //     role: role,
+      //     d_license_no : d_license_no 
+      //   },
+      //   {
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     },        
+          
+      //   });
+      //   console.log(res)
+      //   // localStorage.setItem("token",res.data.token)
+      //   alert("Successfully registered")
+      //   navigate("/login");
+      // } catch (error) {
+      //   console.error("Error:", error);
+      //   alert("Failed to add task. Please try again.");
+      // }
   }
   });
   return (
@@ -108,10 +102,9 @@ export const SignUp = () => {
         <div className="form">
           <div className="left-side container shadow-2xl">
           <h2 className="pt-5 font-weight-bold text-center">
-              {formik.values.isSignUp? "Sign Up" : "Sign In"}
+             SignUp
             </h2>
             <form onSubmit={formik.handleSubmit} className="signup-form">
-              {formik.values.isSignUp && (
                 <>
                   <div className="mb-3 mt-3">
                     <input 
@@ -166,18 +159,18 @@ export const SignUp = () => {
                   <div className="mb-3">
                     <input
                       type="text"
-                      id="contact_no"
-                      name="contact_no"
+                      id="phone_no"
+                      name="phone_no"
                       placeholder="Contact_no"
                       className="form-control"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.contact_no}
+                      value={formik.values.phone_no}
                     />
 
-                    {formik.touched.contact_no && formik.errors.contact_no && (
+                    {formik.touched.phone_no && formik.errors.phone_no && (
                       <div className="text-danger">
-                        {formik.errors.contact_no}
+                        {formik.errors.phone_no}
                       </div>
                     )}
                   </div>
@@ -217,19 +210,19 @@ export const SignUp = () => {
                   <div className="mb-3">
                     <input
                       type="text"
-                      id="driving_license_no"
-                      name="driving_license_no"
+                      id="d_license_no"
+                      name="d_license_no"
                       placeholder=" Driving License No"
                       className="form-control"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.driving_license_no}
+                      value={formik.values.d_license_no}
                     />
 
-                    {formik.touched.driving_license_no &&
-                      formik.errors.driving_license_no && (
+                    {formik.touched.d_license_no &&
+                      formik.errors.d_license_no && (
                         <div className="text-danger">
-                          {formik.errors.driving_license_no}
+                          {formik.errors.d_license_no}
                         </div>
                       )}
                   </div>
@@ -237,63 +230,9 @@ export const SignUp = () => {
                     Sign Up
                   </button>
                 </>
-              )}
-              {!formik.values.isSignUp && (
-                <>
-                  <div className="mb-2 mt-2">
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Enter Email"
-                      className="form-control"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.email}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <div className="text-danger">{formik.errors.email}</div>
-                    )}
-                  </div>
-                  <div className="mb-2 mt-3">
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      className="form-control"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password}
-                    />
-                    {formik.touched.password && formik.errors.password && (
-                      <div className="text-danger">
-                        {formik.errors.password}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-color"
-                    disabled={formik.isSubmitting}
-                    onClick={()=>handleSignIn(initialValues.email,initialValues.password)}
-                  >
-                   Sign In
-                  </button> 
-                </>
-              )}
-               <p className="mt-2">
-              {formik.values.isSignUp
-                ? "Already have an account? "
-                : "Don't have an account? "}
-              <button
-                type="button"
-                className="btn btn-link p-0"
-                onClick={() =>
-                  formik.setFieldValue("isSignUp", !formik.values.isSignUp)
-                }
-              >
-                {formik.values.isSignUp ? "Sign In" : "Sign Up"}
-              </button>
-            </p>
+            <p>
+             Do you have an Account? <Link to={"/login"}>SignIn</Link>
+            </p>  
             </form>
           </div>
            
