@@ -6,7 +6,7 @@ import { Bike, Pencil, Trash2 } from "lucide-react";
 import bike from "../images/bike.jpg";
 import Jeep from "../images/Jeep.jpg";
 
-export default function GetVehicles() {
+export default function SelectVehicles() {
   const [users, setUsers] = useState<VehicleData[]>([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -44,52 +44,31 @@ export default function GetVehicles() {
     fetchData();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    
+  const handleBook = async (id: number) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://127.0.0.1:8000/vehicles/${id}`, {
+      const response = await axios.put(`http://127.0.0.1:8000/vehicles/${id}`, {
+        status: "booked"
+      }, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
       if (response.status === 200) {
-        // Remove the deleted item from the state
-       
-        setUsers(users.filter(vehicle => (console.log(vehicle,id),vehicle.id !== id)));
-        console.log('Data deleted successfully');
-      } else {
-        console.error('Failed to delete data');
-      }
-    } catch (error) {
-      console.error('Error deleting data:', error);
-    }
-  };
-
-  const handleEdit = async (vehicleId: number) => {
-    try {
-      const token = localStorage.getItem('token');
-      console.log(token)
-      const response = await axios.patch(
-        `http://127.0.0.1:8000/vehicle/${vehicleId}`,
-        // Pass the updated data for the vehicle to the backend
-         { headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        // Update the status of the vehicle locally
+        setUsers(users.map(vehicle => {
+          if (vehicle.id === id) {
+            return { ...vehicle, status: "booked" };
           }
-        }
-        
-      );
-      if (response.status === 200) {
-        // Handle successful update, e.g., refetch the data from the backend
-        // fetchData(); // Assuming fetchData function exists to refetch the data
-        console.log('Data updated successfully');
+          return vehicle;
+        }));
+        console.log('Vehicle booked successfully');
       } else {
-        console.error('Failed to update data');
+        console.error('Failed to book the vehicle');
       }
     } catch (error) {
-      console.error('Error updating data:', error);
+      console.error('Error booking the vehicle:', error);
     }
   };
 
@@ -163,8 +142,9 @@ export default function GetVehicles() {
                   )}
                 </span><br/>
                   <div className="d-flex justify-content-end mb-0 pb-0">    
-                  <button className="mr-2" onClick={() => handleEdit(vehicle.id)}><Pencil/></button>
-                  <button className="mr-3" onClick={() => handleDelete(vehicle.id)}><Trash2/></button>
+                  <button className="btn btn-success" onClick={()=>handleBook(vehicle.id)}>Book</button>
+                  {/* <button className="mr-2" onClick={() => handleEdit(vehicle.id)}><Pencil/></button>
+                  <button className="mr-3" onClick={() => handleDelete(vehicle.id)}><Trash2/></button> */}
                 </div>
               </div>
             </div>

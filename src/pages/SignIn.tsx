@@ -58,7 +58,11 @@ export const SignIn = () => {
       };
       if (!isPending) {
         mutate(payload, {
-          onSuccess: () => {
+          onSuccess: (resp) => {
+            // console.log(resp.data.user.role);
+            if(resp.data.user.role=="admin")
+            navigate("/admin");
+            else
             navigate("/vehicle");
           },
         });

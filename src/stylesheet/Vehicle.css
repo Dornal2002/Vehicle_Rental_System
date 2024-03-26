@@ -14,20 +14,21 @@
 }
 
 .profile-car-image{
-    margin-top: -11%;
-    margin-left: -2%;
+    margin-top: -15%;
+    /* margin-right: 10%; */
+    margin-left: -8%;
 }
 
 .profile-car-image {
     position: relative;
     overflow:visible;
-    /* width: 300px; /* Adjust based on your image size */
-    /* height: 200px; Adjust based on your image size */
+    width: 75%; 
+    height: 100%;
 } 
 
 /* Define the image */
 .profile-car-image img {
-    display: block;
+    display:block;
     transition: transform 0.5s ease; /* Transition property for smooth movement */
 }
 
@@ -38,11 +39,21 @@
 }
 
 .car-card{
-    width: 18%;
+    width: 90%;
     border-radius: 5%;
     transition: 0.5s;  
 }
 
 .car-card:hover{
    transform: translateY(-10px);
+}
+
+.admin-portal{
+    background-color: aqua;
+}
+
+.get-vehicles{
+    margin-left: -10px !important;
+    border: 2px solid rgb(80, 77, 77);
+    border-radius: 10px;
 }

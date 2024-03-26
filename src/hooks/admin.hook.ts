@@ -7,6 +7,8 @@ const api_url = `${API_END_POINT}`;
 
 export const AddVehicle = () => {
     // const navigate=useNavigate()
+    const token = localStorage.getItem("token");
+    console.log(token);
     
     const { mutate, isError, isPending } = useMutation({
       mutationKey: ["vehicles"],
@@ -16,6 +18,7 @@ export const AddVehicle = () => {
       },
       onSuccess:(data)=>{
         const authToken = data.data.token; 
+        localStorage.setItem("token", authToken);
         console.log("Vehicle Token:", authToken);
   
       },

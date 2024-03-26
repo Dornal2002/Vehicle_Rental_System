@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage ,FormikHelpers} from "formik";
 import v1 from "../images/v1.jpg";
-import { Pencil, Trash2 } from "lucide-react";
+import { CarTaxiFront, Pencil, Trash2 } from "lucide-react";
 import * as Yup from "yup";
 import axios from "axios";
+import { Car, Bike } from "lucide-react";
 import { useNavigate } from "react-router";
-import { VehicleData } from "../types/UserDetails";
+import { Rental, VehicleData } from "../types/UserDetails";
 import { AddVehicle } from "../hooks/admin.hook";
 import GetVehicles from "./GetVehicles";
 
 export default function Admin() {
   const [showModal, setShowModal] = useState(false);
+
+  const [selectedVehicle, setSelectedVehicle] = useState("");
   const navigate=useNavigate()
   // const { mutate, isError, isPending } = AddVehicle();
 
@@ -22,7 +25,15 @@ export default function Admin() {
     setShowModal(false);
   };
 
+
+  const handleSelectionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSelectedVehicle(event.target.value);
+  };
+
   const initialValues = {
+    id:0,
     v_type: "",
     vehicle_no: "",
     make: "",
@@ -39,18 +50,19 @@ export default function Admin() {
     vehicle_no: Yup.string().required("Vehicle Number is required"),
     make: Yup.string().required("Vehicle Make is required"),
     model: Yup.string().required("Vehicle Model is required"),
-    year: Yup.string().required("Year of Manufacture is required"),
+    year: Yup.number().min(2015).max(2024).required("Year of Manufacture is required"),
     fuel_type: Yup.string().required("fueltype is required"),
     mileage: Yup.string().required("Mileage is required"),
     price_per_hrs: Yup.string().required("Price Per Hours is required"),
   });
 
   const handleSubmit = async (
-    values: VehicleData, // Replace 'VehicleData' with your actual type for form values
-    { setSubmitting }: FormikHelpers<VehicleData> // FormikHelpers type provides the correct type for setSubmitting
+    values: VehicleData, 
+    { setSubmitting }: FormikHelpers<VehicleData>
   ) => {
     try {
       const token = localStorage.getItem('token');
+      let url = 'http://127.0.0.1:8000/vehicles';
       const response = await axios.post('http://127.0.0.1:8000/vehicles', values, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,6 +70,7 @@ export default function Admin() {
         }
       });
       console.log('Data posted successfully:', response.data);
+      // setVehicles(response.data);login
       closeModal(); // Close the modal after successful submission
     } catch (error) {
       console.error('Error posting data:', error);
@@ -65,9 +78,41 @@ export default function Admin() {
     setSubmitting(false);
   };
 
+  const handleSignout = () => {
+    // Clear authentication token from localStorage
+    localStorage.removeItem("token");
+    // Navigate the user to the login page
+    navigate("/login");
+  };
+
+  // const handleSubmit=async({ v_type,vehicle_no,make, model,year,fuel_type,mileage,price_per_hrs,status}:VehicleData)=>{
+  //   const payload: VehicleData = {
+  //     v_type:v_type,
+  //     vehicle_no:vehicle_no,
+  //     make:make,
+  //     model:model,
+  //     year:year,
+  //     fuel_type:fuel_type,
+  //     mileage:mileage,
+  //     price_per_hrs:price_per_hrs,
+  //     status:status
+      
+  //   };
+  //   if (!isPending) {
+  //     mutate(payload, {
+  //       onSuccess: () => {
+  //         alert("Data Added Successfully")
+  //         // navigate("/login");
+  //         closeModal();
+  //       },
+  //     })
+  //   }
+  // }
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-secondary justify-content-center">
+    <div className="admin-portal"> 
+      <nav className="navbar navbar-expand-lg bg-warning justify-content-center">
         <form className="form-inline text-center">
           <button
             className="btn btn-outline-success btn-hover text-light bg-success my-2 text-center"
@@ -77,6 +122,13 @@ export default function Admin() {
           >
             Add Vehicles
           </button>
+          <button
+              className="btn btn-outline-danger btn-hover text-light bg-danger my-2 text-center"
+              type="button"
+              onClick={handleSignout}
+            >
+              Sign out
+            </button>
         </form>
       </nav>
 
@@ -107,18 +159,62 @@ export default function Admin() {
                 >
                   <Form>
                     <div className="form-group">
-                      <label htmlFor="vehiclv_typeeType">Vehicle Type</label>
+                    <div className="mb-3">
+                    <label htmlFor="v_type">Vehicle Type</label>
                       <Field
-                        type="text"
+                        as="select"
                         className="form-control"
                         id="v_type"
                         name="v_type"
-                      />
+                      >
+                        <option value="">Select Vehicle Type</option>
+                        <option value="car">Car</option>
+                        <option value="bike">Bike</option>
+                        <option value="jeep">Jeep</option>
+                      </Field>
                       <ErrorMessage
                         name="v_type"
                         component="div"
                         className="text-danger"
                       />
+                {/* <div className="d-flex">
+                  <label className="mr-5">
+                    <input
+                      type="radio"
+                      value="car"
+                      id="car"
+                      name="car"
+                      checked={selectedVehicle === "car"}
+                      onChange={handleSelectionChange}
+                    />
+                    <Car size={32} />
+                    Car{" "}
+                  </label>
+
+                  <label className="ms-5 mr-5">
+                    <input
+                      type="radio"
+                      value="bike"
+                      id="bike"
+                      name="bike"
+                      checked={selectedVehicle === "bike"}
+                      onChange={handleSelectionChange}
+                    />
+                    <Bike size={32} />
+                    Bike{" "}
+                  </label>
+                  <label className="ms-5">
+                    <input
+                      type="radio"
+                      value="jeep"
+                      checked={selectedVehicle === "jeep"}
+                      onChange={handleSelectionChange}
+                    />
+                    <CarTaxiFront size={32} />
+                    Jeep{" "}
+                  </label>
+                </div> */}
+              </div>
                       <label htmlFor="vehicle_no">Vehicle Number</label>
                       <Field
                         type="text"
@@ -210,9 +306,23 @@ export default function Admin() {
                         component="div"
                         className="text-danger"
                       />
+                      <label htmlFor="price_per_hrs">Status</label>
+                      <Field
+                        as="select"
+                        className="form-control"
+                        id="status"
+                        name="status"
+                      >
+                        <option value="">Select Fuel Type</option>
+                        <option value="available">Available</option>
+                        <option value="booked">Booked</option>
+                        </Field>
+                      <ErrorMessage
+                        name="status"
+                        component="div"
+                        className="text-danger"
+                      />
                     </div>
-
-                    {/* Add more form fields as needed */}
                     <div className="modal-footer">
                       <button
                         type="button"
@@ -233,6 +343,10 @@ export default function Admin() {
         </div>
       )}
 
+      <div className="">
+        <h2 className="text-center">Welcome to Admin Portal</h2>
+      </div>
+
       <div className="container">
       {/* <div className="card mt-3 car-card shadow-2xl">
                  <div className="card-header">
@@ -251,6 +365,7 @@ export default function Admin() {
               <GetVehicles/>
              </div>
 
+      </div>
       </div>
 
     </>

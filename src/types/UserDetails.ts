@@ -10,6 +10,7 @@ export interface SignUp_Data{
   }
 
   export interface VehicleData{
+    id:number,
     v_type:string,
     vehicle_no:string,
     make:string,
@@ -21,7 +22,18 @@ export interface SignUp_Data{
     status:string
   }
 
-  export interface Rental{
+export interface Rental{
+    pickup_point:string,
+    destination:string,
+    start_date:Date,
+    actual_end_date:Date
     total_bill:number,
-    payment_mode:string
-  }
+    payment_mode:string,
+    extra_cost:number,
+    payment_status:string
+}
+
+// export interface Rental{
+//   total_bill:number,
+//   payment_mode:string
+// }
