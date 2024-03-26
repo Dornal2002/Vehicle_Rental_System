@@ -1,25 +1,22 @@
-import car3 from "../images/car3.png";
 import "../stylesheet/Vehicle.css";
-import { useFormik } from "formik";
-import imp_loc from "../images/img_loc.jpg";
 import imp_car from "../images/imp_car.png";
 import location1 from "../images/location1.jpg";
 import axios from "axios";
-import { Car, Bike } from "lucide-react";
+import { Rental } from "../types/UserDetails";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
-
-export const initialValues={
-  start_date:"",
-  expected_end_date:"",
-  vehicle_id:0,
-  pickup_point:"",
-  destination:"",
-  payment_mode: ""
-}
+export const initialValues = {
+  start_date: "",
+  expected_end_date: "",
+  vehicle_id: 0,
+  pickup_point: "",
+  destination: "",
+  payment_mode: "",
+};
 export default function Vehicle() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<Rental[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState("");
 
   const handleSelectionChange = (
@@ -29,14 +26,14 @@ export default function Vehicle() {
   };
   const handleSubmit = async () => {
     const token = localStorage.getItem("token");
-    console.log(token)
+    console.log(token);
     const data = {
       pickup_point: initialValues.pickup_point,
       destination: initialValues.destination,
-      start_date:initialValues.start_date,
-      expected_end_date:initialValues.expected_end_date,
-      vehicle_id:initialValues.vehicle_id,
-      payment_mode:initialValues.payment_mode
+      start_date: initialValues.start_date,
+      expected_end_date: initialValues.expected_end_date,
+      vehicle_id: initialValues.vehicle_id,
+      payment_mode: initialValues.payment_mode,
     };
 
     try {
@@ -53,8 +50,6 @@ export default function Vehicle() {
       console.error("Error posting data:", error);
     }
   };
-
-  
 
   return (
     <div className="vehicle-page-img">
@@ -79,9 +74,6 @@ export default function Vehicle() {
                   name="pickup_point"
                   placeholder="Enter Source"
                   className="form-control"
-                  //   onChange={formik.handleChange}
-                  //   onBlur={formik.handleBlur}
-                  //   value={formik.values.name}
                 />
               </div>
               <div className="mb-3 mt-3">
@@ -92,9 +84,6 @@ export default function Vehicle() {
                   name="destination"
                   placeholder="Enter Destination"
                   className="form-control"
-                  //   onChange={formik.handleChange}
-                  //   onBlur={formik.handleBlur}
-                  //   value={formik.values.name}
                 />
               </div>
               {/* <div className="mb-3 mt-3">
@@ -127,37 +116,42 @@ export default function Vehicle() {
                 <div>
                   <label>PICKUP DATE</label>
                   <br />
-                  <input type="date"  id="start_date"
-                  name="start_date" />
+                  <input type="date" id="start_date" name="start_date" />
                 </div>
                 <div className="ms-5">
                   <label>DROP DATE</label>
                   <br />
-                  <input type="date" id="expected_end_date" name="expected_end_date"/>
+                  <input
+                    type="date"
+                    id="expected_end_date"
+                    name="expected_end_date"
+                  />
                 </div>
               </div>
               <div className="mt-3">
-
-            <label>Payment Mode</label>
-              <select
-                      className="form-control"
-                    >
-                      <option value="" disabled>
-                        Select Payment Status
-                      </option>
-                      <option value="cash">Cash</option>
-                      <option value="card">Card</option>
-                      <option value="upi">UPI</option>
-                    </select>
-                    </div>
+                <label>Payment Mode</label>
+                <select className="form-control">
+                  <option value="" disabled>
+                    Select Payment Status
+                  </option>
+                  <option value="cash">Cash</option>
+                  <option value="card">Card</option>
+                  <option value="upi">UPI</option>
+                </select>
+              </div>
               <div>
-                <button className="btn btn-primary mt-3" onClick={()=>navigate('/selectvehicles')}>SELECT VEHICLE</button>
+                <button
+                  className="btn btn-primary mt-3"
+                  onClick={() => navigate("/selectvehicles")}
+                >
+                  SELECT VEHICLE
+                </button>
               </div>
             </div>
           </div>
         </div>
         <div className="profile-car-image">
-        <img className="h-100" src={imp_car} alt="car"/>
+          <img className="h-100" src={imp_car} alt="car" />
         </div>
       </div>
 
@@ -170,6 +164,6 @@ export default function Vehicle() {
         </div>
         
       </div> */}
-      </div>
+    </div>
   );
 }

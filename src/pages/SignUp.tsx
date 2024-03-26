@@ -1,10 +1,8 @@
 import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.css";
 import * as yup from "yup";
-import { v4 as uuidv4 } from "uuid";
 import "../stylesheet/SignUp.css";
 import car from "../images/car.jpg";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { SignupMutation } from "../hooks/signIn.hook";
@@ -17,14 +15,13 @@ export const initialValues = {
   phone_no: "",
   address: "",
   role: "",
-  d_license_no: ""
+  d_license_no: "",
 };
 
 export const SignUp = () => {
   const { mutate, isError, isPending } = SignupMutation();
 
-  const navigate=useNavigate()
-
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     name: yup.string().required("Please provide Username"),
@@ -42,21 +39,29 @@ export const SignUp = () => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    
-    onSubmit: async ({name, email, password, phone_no, address,role,d_license_no }) => {
+
+    onSubmit: async ({
+      name,
+      email,
+      password,
+      phone_no,
+      address,
+      role,
+      d_license_no,
+    }) => {
       const payload: SignUp_Data = {
         name: name,
         email: email,
         password: password,
         phone_no: phone_no,
-        address:address,
-        role:role,
-        d_license_no:d_license_no
+        address: address,
+        role: role,
+        d_license_no: d_license_no,
       };
       if (!isPending) {
         mutate(payload, {
           onSuccess: () => {
-            alert("sign up Successfull")
+            alert("sign up Successfull");
             navigate("/login");
           },
         });
@@ -69,13 +74,13 @@ export const SignUp = () => {
       //     phone_no: phone_no,
       //     address: address,
       //     role: role,
-      //     d_license_no : d_license_no 
+      //     d_license_no : d_license_no
       //   },
       //   {
       //     headers: {
       //       'Content-Type': 'application/json'
-      //     },        
-          
+      //     },
+
       //   });
       //   console.log(res)
       //   // localStorage.setItem("token",res.data.token)
@@ -85,29 +90,27 @@ export const SignUp = () => {
       //   console.error("Error:", error);
       //   alert("Failed to add task. Please try again.");
       // }
-  }
+    },
   });
   return (
     <>
       <div>
-        <div 
+        <div
           style={{
             height: "100vh",
-            width: '100%',
-            backgroundImage:`url(${car})`,
-            backgroundSize:"cover",
-            backgroundRepeat:"no-repeat"
-          }}>
-       
-        <div className="form">
-          <div className="left-side container shadow-2xl">
-          <h2 className="pt-5 font-weight-bold text-center">
-             SignUp
-            </h2>
-            <form onSubmit={formik.handleSubmit} className="signup-form">
+            width: "100%",
+            backgroundImage: `url(${car})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="form">
+            <div className="left-side container shadow-2xl">
+              <h2 className="pt-5 font-weight-bold text-center">SignUp</h2>
+              <form onSubmit={formik.handleSubmit} className="signup-form">
                 <>
                   <div className="mb-3 mt-3">
-                    <input 
+                    <input
                       type="text"
                       id="name"
                       name="name"
@@ -230,16 +233,13 @@ export const SignUp = () => {
                     Sign Up
                   </button>
                 </>
-            <p>
-             Do you have an Account? <Link to={"/login"}>SignIn</Link>
-            </p>  
-            </form>
+                <p>
+                  Do you have an Account? <Link to={"/login"}>SignIn</Link>
+                </p>
+              </form>
+            </div>
           </div>
-           
-           
-          </div>
-          </div>
-
+        </div>
       </div>
     </>
   );

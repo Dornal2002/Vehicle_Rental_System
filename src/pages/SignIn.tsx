@@ -1,15 +1,11 @@
 import { useFormik } from "formik";
 import "bootstrap/dist/css/bootstrap.css";
 import * as yup from "yup";
-import { v4 as uuidv4 } from "uuid";
 import "../stylesheet/SignUp.css";
 import car from "../images/car.jpg";
-import axios from "axios";
 import { SiginMutation } from "../hooks/signIn.hook";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { error } from "console";
-import { useEffect } from "react";
 
 export const initialValues = {
   email: "",
@@ -17,10 +13,9 @@ export const initialValues = {
 };
 
 export const SignIn = () => {
-  const authToken=  localStorage.getItem("token");
+  const authToken = localStorage.getItem("token");
   const { mutate, isError, isPending } = SiginMutation();
   const navigate = useNavigate();
-
 
   const validationSchema = yup.object({
     email: yup.string().email("Invalid Email").required("Email is required"),
@@ -60,10 +55,8 @@ export const SignIn = () => {
         mutate(payload, {
           onSuccess: (resp) => {
             // console.log(resp.data.user.role);
-            if(resp.data.user.role=="admin")
-            navigate("/admin");
-            else
-            navigate("/vehicle");
+            if (resp.data.user.role == "admin") navigate("/admin");
+            else navigate("/vehicle");
           },
         });
       }
@@ -99,9 +92,7 @@ export const SignIn = () => {
                       value={formik.values.email}
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <div className="text-danger">
-                        {formik.errors.email}
-                      </div>
+                      <div className="text-danger">{formik.errors.email}</div>
                     )}
                   </div>
 

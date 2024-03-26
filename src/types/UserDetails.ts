@@ -23,6 +23,7 @@ export interface SignUp_Data{
   }
 
 export interface Rental{
+  id:number,
     pickup_point:string,
     destination:string,
     start_date:Date,
@@ -32,8 +33,3 @@ export interface Rental{
     extra_cost:number,
     payment_status:string
 }
-
-// export interface Rental{
-//   total_bill:number,
-//   payment_mode:string
-// }
