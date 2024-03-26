@@ -8,8 +8,8 @@ import Jeep from "../images/Jeep.jpg";
 export default function SelectVehicles() {
   const [users, setUsers] = useState<VehicleData[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+ 
+     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get("http://127.0.0.1:8000/vehicles", {
@@ -40,7 +40,7 @@ export default function SelectVehicles() {
         console.error("Error fetching users data:", error);
       }
     };
-
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -69,6 +69,7 @@ export default function SelectVehicles() {
 
       if (response.status === 200) {
         alert("Booking Done Successsfully");
+        fetchData();  
       } else {
         console.error("Failed to book the vehicle");
       }
@@ -81,6 +82,7 @@ export default function SelectVehicles() {
     <>
       <div className="container bg-yellow-200">
         <div className="row h-100vh">
+          {users.length==0 && <h1>No vehicles Available for booking</h1>}
           {users.map((vehicle, index) => (
             <div className="col-md-3 mt-3" key={index}>
               <div className="card car-card shadow-2xl">

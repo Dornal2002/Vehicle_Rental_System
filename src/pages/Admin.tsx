@@ -33,7 +33,7 @@ export default function Admin() {
     vehicle_no: "",
     make: "",
     model: "",
-    year: 2000,
+    year: 2015,
     fuel_type: "",
     mileage: 0,
     price_per_hrs: 0.0,
@@ -72,8 +72,8 @@ export default function Admin() {
         }
       );
       console.log("Data posted successfully:", response.data);
-      // setVehicles(response.data);login
-      closeModal(); // Close the modal after successful submission
+      // setVehicles(response.data);
+      closeModal(); 
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -356,22 +356,7 @@ export default function Admin() {
         </div>
 
         <div className="container">
-          {/* <div className="card mt-3 car-card shadow-2xl">
-                 <div className="card-header">
-                     <img src={v1} alt="Image 1"/>
-                 </div>
-                 <div className="card-body d-flex">
-                     <p>Total Bill:100</p>
-                     <br/>
-                     <p>Payment Status :Paid</p>
-                     <p>{<Pencil/>}</p>
-                     <p>{<Trash2/>}</p>
-                    
-                 </div>
-             </div> */}
-          <div>
             <GetVehicles />
-          </div>
         </div>
       </div>
     </>
